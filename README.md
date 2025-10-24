@@ -155,6 +155,3 @@ you’re free to fork, modify, and contribute.
 
 💬 “Don’t just learn algorithms — visualize, interact, and master them.”
 — AlgorithMat Team ⚡
-
-yaml
-Copy code
