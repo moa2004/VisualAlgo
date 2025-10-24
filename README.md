@@ -68,8 +68,9 @@ lib/
 │   ├── quizzes/          # Adaptive quizzes + result summaries
 │   └── home/             # Dashboard & streak display
 └── firebase_options.dart # Firebase environment setup
-
+```
 🧰 Setup & Installation
+
 1️⃣ Clone the repository
 
 git clone https://github.com/<YOUR_USERNAME>/AlgorithMat.git
@@ -86,6 +87,7 @@ Use FlutterFire CLI to link your Firebase project:
 flutterfire configure
 
 Then add your google-services.json (Android) and GoogleService-Info.plist (iOS) files.
+
 4️⃣ Run the project
 
 For web:
@@ -97,27 +99,46 @@ For mobile:
 flutter run
 
 🧩 Key Packages
+
 Package	Purpose
+
 flutter_riverpod	Reactive state management
+
 go_router	Declarative navigation and deep linking
+
 firebase_auth	Authentication
+
 cloud_firestore	Real-time database
+
 firebase_storage	Image and file uploads
+
 flutter_animate	Smooth UI transitions
+
 intl	Date & time formatting
+
 🎨 Design Highlights
 
 ✨ Glassmorphism Interface — soft blur, transparency, and neon teal gradients.
+
 📱 Responsive Layout — fully adaptive for desktop, tablet, and mobile.
+
 🎬 Animated Interactions — powered by flutter_animate for fluid UX.
+
 🌙 Dark-Mode First — clean futuristic design language.
+
 🧭 Screens Overview
+
 Screen	Description
 🧑‍💻 Sign In / Sign Up	Neon-themed authentication with animation & validation
+
 🏠 Home Dashboard	Personalized summary & recent activity cards
+
 🔢 Algorithm Studio	Interactive visualizations with multilingual code
+
 🧠 Quiz Result	Performance report with weak/strong topic highlights
+
 📊 Analytics Dashboard	Full breakdown of user progress & streak trends
+
 🔐 Security & Data
 
     All data stored securely under users/{uid} in Firestore.
@@ -142,6 +163,3 @@ Moamen Mohammed
 
     💬 “Don’t just learn algorithms — visualize, interact, and master them.”
     — AlgorithMat Team ⚡
-
-
----
