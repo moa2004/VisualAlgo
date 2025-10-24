@@ -55,51 +55,47 @@ It’s an interactive learning ecosystem combining visualization, quizzes, analy
 
 ## 🧱 Project Architecture
 
+```plaintext
 lib/
 ├── core/
-│ ├── constants/ # Global colors, typography, assets
-│ ├── widgets/ # Shared UI components (GlassContainer, AppScaffold)
-│ └── layout/ # Responsive design handlers
+│   ├── constants/        # Global colors, typography, assets
+│   ├── widgets/          # Shared UI components (GlassContainer, AppScaffold)
+│   └── layout/           # Responsive design handlers
 ├── features/
-│ ├── auth/ # Authentication (Sign In, Sign Up, Profile)
-│ ├── analytics/ # User statistics & quiz analysis
-│ ├── algorithms/ # Visualization studio & code walkthroughs
-│ ├── quizzes/ # Adaptive quizzes + result summaries
-│ └── home/ # Dashboard & streak display
+│   ├── auth/             # Authentication (Sign In, Sign Up, Profile)
+│   ├── analytics/        # User statistics & quiz analysis
+│   ├── algorithms/       # Visualization studio & code walkthroughs
+│   ├── quizzes/          # Adaptive quizzes + result summaries
+│   └── home/             # Dashboard & streak display
 └── firebase_options.dart # Firebase environment setup
 
-yaml
-Copy code
+🧰 Setup & Installation
+1️⃣ Clone the repository
 
----
-
-## 🧰 Setup & Installation
-
-### 1️⃣ Clone the repository
-```bash
 git clone https://github.com/<YOUR_USERNAME>/AlgorithMat.git
 cd AlgorithMat
+
 2️⃣ Install dependencies
-bash
-Copy code
+
 flutter pub get
+
 3️⃣ Configure Firebase
+
 Use FlutterFire CLI to link your Firebase project:
 
-bash
-Copy code
 flutterfire configure
-Add your google-services.json (Android) and GoogleService-Info.plist (iOS) files.
 
+Then add your google-services.json (Android) and GoogleService-Info.plist (iOS) files.
 4️⃣ Run the project
-bash
-Copy code
-flutter run -d chrome
-or for mobile:
 
-bash
-Copy code
+For web:
+
+flutter run -d chrome
+
+For mobile:
+
 flutter run
+
 🧩 Key Packages
 Package	Purpose
 flutter_riverpod	Reactive state management
@@ -109,16 +105,12 @@ cloud_firestore	Real-time database
 firebase_storage	Image and file uploads
 flutter_animate	Smooth UI transitions
 intl	Date & time formatting
-
 🎨 Design Highlights
+
 ✨ Glassmorphism Interface — soft blur, transparency, and neon teal gradients.
-
 📱 Responsive Layout — fully adaptive for desktop, tablet, and mobile.
-
 🎬 Animated Interactions — powered by flutter_animate for fluid UX.
-
 🌙 Dark-Mode First — clean futuristic design language.
-
 🧭 Screens Overview
 Screen	Description
 🧑‍💻 Sign In / Sign Up	Neon-themed authentication with animation & validation
@@ -126,32 +118,30 @@ Screen	Description
 🔢 Algorithm Studio	Interactive visualizations with multilingual code
 🧠 Quiz Result	Performance report with weak/strong topic highlights
 📊 Analytics Dashboard	Full breakdown of user progress & streak trends
-
 🔐 Security & Data
-All data stored securely under users/{uid} in Firestore.
 
-Firebase Storage rules restrict unauthorized uploads.
+    All data stored securely under users/{uid} in Firestore.
 
-Authentication & access managed via Firebase Auth.
+    Firebase Storage rules restrict unauthorized uploads.
+
+    Authentication & access managed via Firebase Auth.
 
 👨‍💻 Author
-Ahmed Hamdy (Mahmoud)
+
+Moamen Mohammed
 💼 Flutter & .NET Developer | Computer Science Student @ EELU
 📍 Egypt
-🔗 LinkedIn • GitHub
-
+🔗 LinkedIn : www.linkedin.com/in/moamen-gebril-b3791226b
 🛣️ Roadmap
- Leaderboards & XP system
 
- Collaborative visualization mode
+    🏆 Leaderboards & XP system
 
- Weekly coding missions
+    🤝 Collaborative visualization mode
 
- Light-mode theme toggle
+    🌞 Light-mode theme toggle
 
-📜 License
-This project is licensed under the MIT License —
-you’re free to fork, modify, and contribute.
+    💬 “Don’t just learn algorithms — visualize, interact, and master them.”
+    — AlgorithMat Team ⚡
 
-💬 “Don’t just learn algorithms — visualize, interact, and master them.”
-— AlgorithMat Team ⚡
+
+---
