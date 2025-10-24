@@ -160,6 +160,6 @@ Moamen Mohammed
     🤝 Collaborative visualization mode
 
     🌞 Light-mode theme toggle
-
+--
     💬 “Don’t just learn algorithms — visualize, interact, and master them.”
     — AlgorithMat Team ⚡
