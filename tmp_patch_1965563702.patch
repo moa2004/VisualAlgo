@@ -1,0 +1,146 @@
+*** Begin Patch
+*** Update File: lib/features/auth/presentation/sign_up_screen.dart
+@@
+-  Future<void> _showErrorDialog(Object error) async {
+-    if (error is AuthFailure && error.code == 'verification-required') {
+-      await showDialog<void>(
+-        context: context,
+-        builder: (context) {
+-          return AlertDialog(
+-            backgroundColor: AppColors.midnightBlue,
+-            shape: RoundedRectangleBorder(
+-              borderRadius: BorderRadius.circular(20),
+-            ),
+-            title: Row(
+-              children: const [
+-                Icon(Icons.mark_email_read_rounded, color: AppColors.neonTeal),
+-                SizedBox(width: 8),
+-                Text(
+-                  'Verify your email',
+-                  style: TextStyle(color: AppColors.textPrimary),
+-                ),
+-              ],
+-            ),
+-            content: const Text(
+-              'We\'ve sent a verification link to your inbox. Open the email, confirm the link, then come back here to sign in.',
+-              style: TextStyle(color: AppColors.textSecondary),
+-            ),
+-            actions: [
+-              TextButton(
+-                onPressed: () => Navigator.of(context).pop(),
+-                child: const Text('OK'),
+-              ),
+-            ],
+-          );
+-        },
+-      );
+-      if (!mounted) return;
+-      ScaffoldMessenger.of(context).showSnackBar(
+-        const SnackBar(
+-          content: Text('Verification email sent. Check your inbox.'),
+-        ),
+-      );
+-      return;
+-    }
++  Future<void> _showErrorDialog(Object error) async {
++    if (error is AuthFailure && error.code == 'verification-required') {
++      await showDialog<void>(
++        context: context,
++        barrierDismissible: false,
++        builder: (context) {
++          var checking = false;
++          String? checkMessage;
++          return StatefulBuilder(
++            builder: (context, setState) {
++              Future<void> verifyNow() async {
++                if (checking) return;
++                setState(() {
++                  checking = true;
++                  checkMessage = null;
++                });
++                try {
++                  // Try a sign-in to validate that the email is verified now.
++                  await ref.read(authRepositoryProvider).signInWithEmail(
++                        email: _emailController.text.trim(),
++                        password: _passwordController.text.trim(),
++                      );
++                  // Immediately sign out to keep the user flow: go to Sign In next.
++                  await ref.read(authRepositoryProvider).signOut();
++                  if (mounted) {
++                    Navigator.of(context).pop();
++                    context.go(SignInScreen.routePath);
++                  }
++                } on AuthFailure catch (failure) {
++                  if (failure.code == 'email-not-verified') {
++                    setState(() {
++                      checkMessage =
++                          'Still not verified. Please open the email link, then try again.';
++                    });
++                  } else {
++                    setState(() {
++                      checkMessage = failure.message;
++                    });
++                  }
++                } catch (e) {
++                  setState(() {
++                    checkMessage = 'Could not verify yet. Please try again.';
++                  });
++                } finally {
++                  setState(() {
++                    checking = false;
++                  });
++                }
++              }
++
++              return AlertDialog(
++                backgroundColor: AppColors.midnightBlue,
++                shape: RoundedRectangleBorder(
++                  borderRadius: BorderRadius.circular(20),
++                ),
++                title: Row(
++                  children: const [
++                    Icon(Icons.emoji_emotions_rounded, color: AppColors.neonTeal),
++                    SizedBox(width: 8),
++                    Text(
++                      'Verify your email',
++                      style: TextStyle(color: AppColors.textPrimary),
++                    ),
++                  ],
++                ),
++                content: Column(
++                  mainAxisSize: MainAxisSize.min,
++                  crossAxisAlignment: CrossAxisAlignment.start,
++                  children: [
++                    const Text(
++                      "We've sent a verification link to your inbox. Please verify your mail, then tap 'I've verified' below.",
++                      style: TextStyle(color: AppColors.textSecondary),
++                    ),
++                    if (checkMessage != null) ...[
++                      const SizedBox(height: 12),
++                      Text(
++                        checkMessage!,
++                        style: const TextStyle(color: AppColors.neonTeal),
++                      ),
++                    ],
++                  ],
++                ),
++                actions: [
++                  TextButton(
++                    onPressed: checking ? null : verifyNow,
++                    child: checking
++                        ? const SizedBox(
++                            width: 20,
++                            height: 20,
++                            child: CircularProgressIndicator.adaptive(strokeWidth: 2),
++                          )
++                        : const Text("I've verified"),
++                  ),
++                ],
++              );
++            },
++          );
++        },
++      );
++      return;
++    }
+*** End Patch
