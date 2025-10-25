@@ -201,7 +201,7 @@ class _QuizQuestionCard extends StatelessWidget {
               question.prompt,
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary,
+                color: theme.colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 24),
@@ -266,7 +266,7 @@ class _QuizQuestionCard extends StatelessWidget {
                 child: Text(
                   question.explanation,
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textPrimary,
+                    color: theme.colorScheme.onSurface,
                   ),
                 ),
               ),

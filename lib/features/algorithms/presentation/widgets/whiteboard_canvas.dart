@@ -9,6 +9,12 @@ class WhiteboardCanvas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textColor = theme.colorScheme.onSurface;
+    final isDark = theme.brightness == Brightness.dark;
+    final edgeBaseColor = isDark
+        ? Colors.white.withValues(alpha: 0.28)
+        : AppColors.slateInk.withValues(alpha: 0.55);
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
@@ -16,8 +22,6 @@ class WhiteboardCanvas extends StatelessWidget {
 
         final normalizedNodes = _normalizeNodes(frame.nodes);
         final nodeLookup = {for (var node in normalizedNodes) node.id: node};
-
-        // ⚙️ Smart scale logic:
         final autoScale = _computeAdaptiveScale(
           width: width,
           nodesCount: normalizedNodes.length,
@@ -37,27 +41,26 @@ class WhiteboardCanvas extends StatelessWidget {
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  // 🕸 Edges
                   Positioned.fill(
-                    child: CustomPaint(
-                      painter:
-                          _EdgePainter(frame.edges, nodeLookup, width, height),
+                    child: RepaintBoundary(
+                      child: CustomPaint(
+                        painter: _EdgePainter(
+                          frame.edges,
+                          nodeLookup,
+                          width,
+                          height,
+                          defaultColor: edgeBaseColor,
+                        ),
+                      ),
                     ),
                   ),
-
-                  // 🟢 Nodes
                   ...normalizedNodes.map(
                     (node) => Positioned(
                       left: node.x * width - 32,
                       top: node.y * height - 32,
-                      child: _NodeWidget(
-                        node: node,
-                        shrink: autoScale < 1,
-                      ),
+                      child: _NodeWidget(node: node, shrink: autoScale < 1),
                     ),
                   ),
-
-                  // 🟣 Pointers
                   ...frame.pointers.map(
                     (pointer) => _PointerWidget(
                       pointer: pointer,
@@ -66,8 +69,6 @@ class WhiteboardCanvas extends StatelessWidget {
                       height: height,
                     ),
                   ),
-
-                  // 🧩 Arrays (responsive + scroll)
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(
@@ -82,14 +83,17 @@ class WhiteboardCanvas extends StatelessWidget {
                           spacing: 12,
                           runSpacing: 12,
                           children: frame.arrays.map((a) {
-                            return _ArrayWidget(a, shrink: autoScale < 1);
+                            return _ArrayWidget(
+                              a,
+                              shrink: autoScale < 1,
+                              textColor: textColor,
+                              isDark: isDark,
+                            );
                           }).toList(),
                         ),
                       ),
                     ),
                   ),
-
-                  // 📝 Annotations
                   if (frame.annotations.isNotEmpty)
                     Positioned(
                       right: 16,
@@ -101,19 +105,22 @@ class WhiteboardCanvas extends StatelessWidget {
                               (annotation) => Container(
                                 margin: const EdgeInsets.only(bottom: 8),
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 8),
+                                  horizontal: 12,
+                                  vertical: 8,
+                                ),
                                 decoration: BoxDecoration(
                                   color: Colors.white.withValues(alpha: 0.08),
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
-                                    color: AppColors.neonTeal
-                                        .withValues(alpha: 0.4),
+                                    color: AppColors.neonTeal.withValues(
+                                      alpha: 0.4,
+                                    ),
                                   ),
                                 ),
                                 child: Text(
                                   annotation,
-                                  style: const TextStyle(
-                                    color: AppColors.textPrimary,
+                                  style: TextStyle(
+                                    color: textColor,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -130,8 +137,6 @@ class WhiteboardCanvas extends StatelessWidget {
       },
     );
   }
-
-  /// Normalize coordinates
   List<WhiteboardNode> _normalizeNodes(List<WhiteboardNode> nodes) {
     if (nodes.isEmpty) return nodes;
     final xs = nodes.map((n) => n.x).toList();
@@ -154,19 +159,17 @@ class WhiteboardCanvas extends StatelessWidget {
         )
         .toList();
   }
-
-  /// 💡 Adaptive scale: only shrink when needed
   double _computeAdaptiveScale({
     required double width,
     required int nodesCount,
     required int arraysCount,
   }) {
     final totalElements = nodesCount + arraysCount;
-    if (totalElements <= 20) return 1.0; // Large & clear for small sets
+    if (totalElements <= 20) return 1.0; 
     if (totalElements <= 35) return 0.9;
     if (totalElements <= 50) return 0.8;
     if (totalElements <= 80) return 0.7;
-    return 0.6; // Only shrink heavily for huge sets
+    return 0.6; 
   }
 }
 
@@ -220,18 +223,25 @@ class _NodeWidget extends StatelessWidget {
 }
 
 class _EdgePainter extends CustomPainter {
-  _EdgePainter(this.edges, this.lookup, this.width, this.height);
+  _EdgePainter(
+    this.edges,
+    this.lookup,
+    this.width,
+    this.height, {
+    required this.defaultColor,
+  });
   final List<WhiteboardEdge> edges;
   final Map<String, WhiteboardNode> lookup;
   final double width;
   final double height;
+  final Color defaultColor;
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke
-      ..color = Colors.white.withValues(alpha: 0.2);
+      ..color = defaultColor;
 
     for (final edge in edges) {
       final fromNode = lookup[edge.from];
@@ -241,17 +251,17 @@ class _EdgePainter extends CustomPainter {
       final fromOffset = Offset(fromNode.x * width, fromNode.y * height);
       final toOffset = Offset(toNode.x * width, toNode.y * height);
 
-      paint.color = edge.highlight
-          ? AppColors.neonTeal
-          : Colors.white.withValues(alpha: 0.25);
+      paint.color = edge.highlight ? AppColors.neonTeal : defaultColor;
       canvas.drawLine(fromOffset, toOffset, paint);
 
       if (edge.directed) {
         final arrowPaint = Paint()
           ..style = PaintingStyle.fill
           ..color = paint.color;
-        final angle =
-            atan2(toOffset.dy - fromOffset.dy, toOffset.dx - fromOffset.dx);
+        final angle = atan2(
+          toOffset.dy - fromOffset.dy,
+          toOffset.dx - fromOffset.dx,
+        );
         const arrowSize = 12.0;
         final arrowPoint = toOffset - Offset(cos(angle) * 32, sin(angle) * 32);
         final path = Path()
@@ -272,26 +282,47 @@ class _EdgePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _EdgePainter oldDelegate) =>
-      oldDelegate.edges != edges;
+      oldDelegate.edges != edges || oldDelegate.defaultColor != defaultColor;
 }
 
 class _ArrayWidget extends StatelessWidget {
-  const _ArrayWidget(this.array, {required this.shrink});
+  const _ArrayWidget(
+    this.array, {
+    required this.shrink,
+    required this.textColor,
+    required this.isDark,
+  });
   final WhiteboardArray array;
   final bool shrink;
+  final Color textColor;
+  final bool isDark;
 
   @override
   Widget build(BuildContext context) {
     final fontSize = shrink ? 12.0 : 14.0;
+    final theme = Theme.of(context);
+    final labelColor = textColor.withValues(alpha: isDark ? 0.85 : 0.65);
+    final baseTileColor = isDark
+        ? Colors.white.withValues(alpha: 0.08)
+        : AppColors.cloudBlue.withValues(alpha: 0.85);
+    final borderColor = isDark
+        ? Colors.white.withValues(alpha: 0.15)
+        : AppColors.cloudBlue.withValues(alpha: 0.6);
+    final highlightColor = AppColors.neonTeal.withValues(
+      alpha: isDark ? 0.35 : 0.2,
+    );
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(array.name,
-            style: Theme.of(context)
-                .textTheme
-                .labelLarge
-                ?.copyWith(fontSize: fontSize, color: Colors.white70)),
+        Text(
+          array.name,
+          style: theme.textTheme.labelLarge?.copyWith(
+            fontSize: fontSize,
+            color: labelColor,
+          ),
+        ),
         const SizedBox(height: 6),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -309,19 +340,23 @@ class _ArrayWidget extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: array.highlightIndices.contains(i)
-                        ? AppColors.neonTeal.withValues(alpha: 0.35)
-                        : Colors.white.withValues(alpha: 0.08),
+                        ? highlightColor
+                        : baseTileColor,
                     border: Border.all(
                       color: array.highlightIndices.contains(i)
                           ? AppColors.neonTeal
-                          : Colors.white.withValues(alpha: 0.15),
+                          : borderColor,
                     ),
                   ),
                   child: Text(
                     array.values[i],
                     style: TextStyle(
                       fontSize: fontSize,
-                      color: Colors.white,
+                      color: array.highlightIndices.contains(i)
+                          ? (isDark
+                                ? AppColors.deepNight
+                                : Colors.white.withValues(alpha: 0.9))
+                          : textColor,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -373,8 +408,8 @@ class _PointerWidget extends StatelessWidget {
             ),
             child: Text(
               pointer.label,
-              style: const TextStyle(
-                color: AppColors.textPrimary,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
                 fontWeight: FontWeight.w600,
               ),
             ),

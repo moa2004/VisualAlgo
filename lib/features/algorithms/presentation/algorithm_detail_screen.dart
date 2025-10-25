@@ -11,7 +11,6 @@ import 'package:visual_algo/features/analytics/providers.dart';
 import 'package:visual_algo/features/auth/providers.dart';
 import 'package:visual_algo/features/home/providers.dart';
 
-
 class AlgorithmDetailScreen extends ConsumerStatefulWidget {
   const AlgorithmDetailScreen({super.key, required this.algorithmId});
 
@@ -124,7 +123,7 @@ class _AlgorithmDetailBodyState extends State<_AlgorithmDetailBody>
           Text(
             'Multilingual code walkthrough',
             style: theme.textTheme.headlineSmall?.copyWith(
-              color: AppColors.textPrimary,
+              color: theme.colorScheme.onSurface,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -307,7 +306,7 @@ class _ComplexityChip extends StatelessWidget {
       child: RichText(
         text: TextSpan(
           style: theme.textTheme.bodySmall?.copyWith(
-            color: AppColors.textPrimary,
+            color: theme.colorScheme.onSurface,
             fontWeight: FontWeight.w600,
           ),
           children: [

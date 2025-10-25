@@ -78,11 +78,21 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
 
   Widget _buildFrame({required double progress}) {
     final child = widget.child;
-    return Container(
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final gradientColors = isDark
+        ? const [AppColors.midnightBlue, AppColors.deepNight]
+        : const [AppColors.auroraSky, AppColors.dawnMist];
+    final particleColor = (isDark ? AppColors.neonTeal : AppColors.softPurple)
+        .withValues(alpha: isDark ? 0.045 : 0.12);
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 600),
+      curve: Curves.easeOutCubic,
       decoration: BoxDecoration(
         gradient: RadialGradient(
           radius: 1.15 + sin(progress * pi) * 0.15,
-          colors: const [AppColors.midnightBlue, AppColors.deepNight],
+          colors: gradientColors,
           center: Alignment(
             ui.lerpDouble(-0.35, 0.35, progress)!,
             ui.lerpDouble(-0.25, 0.25, 1 - progress)!,
@@ -98,10 +108,28 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
                   progress: progress,
                   particles: _particles,
                   animate: widget.animate,
+                  color: particleColor,
                 ),
               ),
             ),
           ),
+          if (!isDark)
+            Positioned.fill(
+              child: IgnorePointer(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.white.withValues(alpha: 0.35),
+                        Colors.transparent,
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           if (child != null) child,
         ],
       ),
@@ -126,16 +154,18 @@ class _ParticlePainter extends CustomPainter {
     required this.progress,
     required this.particles,
     required this.animate,
+    required this.color,
   });
 
   final double progress;
   final List<_Particle> particles;
   final bool animate;
+  final Color color;
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppColors.neonTeal.withValues(alpha: 0.045)
+      ..color = color
       ..style = PaintingStyle.fill;
 
     for (final particle in particles) {
@@ -153,6 +183,6 @@ class _ParticlePainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _ParticlePainter oldDelegate) {
     if (!animate && !oldDelegate.animate) return false;
-    return oldDelegate.progress != progress;
+    return oldDelegate.progress != progress || oldDelegate.color != color;
   }
 }

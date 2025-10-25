@@ -107,6 +107,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
     final theme = Theme.of(context);
+    final onSurface = theme.colorScheme.onSurface;
     final joinDate = user?.metadata.creationTime != null
         ? DateFormat('MMMM yyyy').format(user!.metadata.creationTime!)
         : DateFormat('MMMM yyyy').format(DateTime.now());
@@ -168,7 +169,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   Text(
                     user?.displayName ?? 'Anonymous User',
                     style: theme.textTheme.headlineSmall?.copyWith(
-                      color: AppColors.textPrimary,
+                      color: onSurface,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -185,7 +186,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               Text(
                 user?.email ?? 'No email registered',
                 style: theme.textTheme.bodyLarge?.copyWith(
-                  color: Colors.white70,
+                  color: onSurface.withValues(alpha: 0.75),
                 ),
               ),
               const SizedBox(height: 24),
@@ -205,7 +206,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     Text(
                       'Account Details',
                       style: theme.textTheme.titleMedium?.copyWith(
-                        color: AppColors.textPrimary,
+                        color: onSurface,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -237,7 +238,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     Text(
                       'Activity Overview',
                       style: theme.textTheme.titleMedium?.copyWith(
-                        color: AppColors.textPrimary,
+                        color: onSurface,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -282,7 +283,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     Text(
                       'Personal Stats',
                       style: theme.textTheme.titleMedium?.copyWith(
-                        color: AppColors.textPrimary,
+                        color: onSurface,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -344,7 +345,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     Text(
                       'Achievements & Badges',
                       style: theme.textTheme.titleMedium?.copyWith(
-                        color: AppColors.textPrimary,
+                        color: onSurface,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -402,6 +403,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   Widget _detailRow(String label, String value) {
+    final theme = Theme.of(context);
+    final onSurface = theme.colorScheme.onSurface;
+    final muted = onSurface.withValues(alpha: 0.7);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
@@ -409,17 +413,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         children: [
           Text(
             label,
-            style: const TextStyle(
-              color: Colors.white70,
-              fontWeight: FontWeight.w500,
-            ),
+            style: TextStyle(color: muted, fontWeight: FontWeight.w500),
           ),
           Flexible(
             child: Text(
               value,
               textAlign: TextAlign.right,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(color: AppColors.textPrimary),
+              style: TextStyle(color: onSurface),
             ),
           ),
         ],
@@ -428,6 +429,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   Widget _activityRow(IconData icon, String label, String value) {
+    final onSurface = Theme.of(context).colorScheme.onSurface;
+    final muted = onSurface.withValues(alpha: 0.65);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
@@ -435,14 +438,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           Icon(icon, color: AppColors.neonTeal, size: 20),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(label, style: const TextStyle(color: Colors.white70)),
+            child: Text(label, style: TextStyle(color: muted)),
           ),
           Text(
             value,
-            style: const TextStyle(
-              color: AppColors.textPrimary,
-              fontWeight: FontWeight.w600,
-            ),
+            style: TextStyle(color: onSurface, fontWeight: FontWeight.w600),
           ),
         ],
       ),
@@ -450,6 +450,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   Widget _statCard(IconData icon, String title, String value) {
+    final onSurface = Theme.of(context).colorScheme.onSurface;
+    final muted = onSurface.withValues(alpha: 0.65);
     return Container(
       width: 100,
       padding: const EdgeInsets.all(12),
@@ -464,22 +466,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           const SizedBox(height: 8),
           Text(
             value,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-            ),
+            style: TextStyle(fontWeight: FontWeight.bold, color: onSurface),
           ),
           const SizedBox(height: 4),
-          Text(
-            title,
-            style: const TextStyle(fontSize: 13, color: Colors.white70),
-          ),
+          Text(title, style: TextStyle(fontSize: 13, color: muted)),
         ],
       ),
     );
   }
 
   Widget _badgeTile(String emoji, String label) {
+    final onSurface = Theme.of(context).colorScheme.onSurface;
+    final muted = onSurface.withValues(alpha: 0.75);
     return Container(
       width: 120,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
@@ -497,7 +495,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             child: Text(
               label,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(color: AppColors.textPrimary),
+              style: TextStyle(color: muted),
             ),
           ),
         ],

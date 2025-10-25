@@ -166,7 +166,7 @@ class _AlgorithmVisualPlayerState extends State<AlgorithmVisualPlayer> {
         Text(
           step.title,
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            color: AppColors.textPrimary,
+            color: Theme.of(context).colorScheme.onSurface,
             fontWeight: FontWeight.w700,
           ),
         ),

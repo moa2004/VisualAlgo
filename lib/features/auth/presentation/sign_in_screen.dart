@@ -35,7 +35,9 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     try {
-      await ref.read(authRepositoryProvider).signInWithEmail(
+      await ref
+          .read(authRepositoryProvider)
+          .signInWithEmail(
             email: _emailController.text.trim(),
             password: _passwordController.text.trim(),
           );
@@ -64,7 +66,10 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Close', style: TextStyle(color: Colors.redAccent)),
+              child: const Text(
+                'Close',
+                style: TextStyle(color: Colors.redAccent),
+              ),
             ),
           ],
         ),
@@ -97,7 +102,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   Text(
                     'Welcome Back',
                     style: theme.textTheme.headlineMedium?.copyWith(
-                      color: AppColors.textPrimary,
+                      color: theme.colorScheme.onSurface,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -117,7 +122,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                 gradient: LinearGradient(
                   colors: [
                     Colors.white.withOpacity(0.05),
-                    Colors.white.withOpacity(0.02)
+                    Colors.white.withOpacity(0.02),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -155,8 +160,9 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                                 setState(() => _obscure = !_obscure),
                           ),
                         ),
-                        validator: (v) =>
-                            v == null || v.length < 6 ? 'Invalid password' : null,
+                        validator: (v) => v == null || v.length < 6
+                            ? 'Invalid password'
+                            : null,
                       ),
                       const SizedBox(height: 30),
                       ElevatedButton.icon(
@@ -166,7 +172,9 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.neonTeal.withOpacity(0.2),
                           foregroundColor: AppColors.neonTeal,
-                          side: BorderSide(color: AppColors.neonTeal.withOpacity(0.4)),
+                          side: BorderSide(
+                            color: AppColors.neonTeal.withOpacity(0.4),
+                          ),
                           padding: const EdgeInsets.symmetric(vertical: 14),
                           textStyle: const TextStyle(
                             fontWeight: FontWeight.bold,
@@ -183,8 +191,10 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('New to AlgorithMat? ',
-                              style: TextStyle(color: Colors.white70)),
+                          const Text(
+                            'New to AlgorithMat? ',
+                            style: TextStyle(color: Colors.white70),
+                          ),
                           TextButton(
                             onPressed: () => context.go(SignUpScreen.routePath),
                             child: const Text(
@@ -208,20 +218,23 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                 gradient: LinearGradient(
                   colors: [
                     Colors.white.withOpacity(0.03),
-                    Colors.white.withOpacity(0.01)
+                    Colors.white.withOpacity(0.01),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
                 child: Column(
                   children: [
-                    const Icon(Icons.auto_graph_rounded,
-                        color: AppColors.neonTeal, size: 36),
+                    const Icon(
+                      Icons.auto_graph_rounded,
+                      color: AppColors.neonTeal,
+                      size: 36,
+                    ),
                     const SizedBox(height: 12),
                     Text(
                       'Why use AlgorithMat?',
                       style: theme.textTheme.titleLarge?.copyWith(
-                        color: AppColors.textPrimary,
+                        color: theme.colorScheme.onSurface,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -238,15 +251,19 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
-                        Icon(Icons.psychology_alt_rounded,
-                            color: AppColors.neonTeal),
+                        Icon(
+                          Icons.psychology_alt_rounded,
+                          color: AppColors.neonTeal,
+                        ),
                         SizedBox(width: 8),
                         Icon(Icons.code_rounded, color: Colors.amberAccent),
                         SizedBox(width: 8),
-                        Icon(Icons.school_rounded,
-                            color: Colors.lightBlueAccent),
+                        Icon(
+                          Icons.school_rounded,
+                          color: Colors.lightBlueAccent,
+                        ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ).animate().fadeIn(duration: 700.ms).slideY(begin: 0.3),

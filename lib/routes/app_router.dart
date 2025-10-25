@@ -14,14 +14,20 @@ import 'package:visual_algo/features/quizzes/presentation/quiz_result_screen.dar
 import 'package:visual_algo/features/analytics/presentation/analytics_screen.dart';
 import 'package:visual_algo/features/quizzes/domain/quiz_models.dart';
 import 'package:visual_algo/features/profile/presentation/profile_screen.dart';
+import 'package:visual_algo/features/splash/presentation/splash_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final refreshListenable = ref.watch(_authRefreshListenableProvider);
 
   return GoRouter(
-    initialLocation: SignInScreen.routePath,
+    initialLocation: SplashScreen.routePath,
     refreshListenable: refreshListenable,
     routes: [
+      GoRoute(
+        path: SplashScreen.routePath,
+        name: SplashScreen.routeName,
+        builder: (context, state) => const SplashScreen(),
+      ),
       GoRoute(
         path: SignInScreen.routePath,
         name: SignInScreen.routeName,

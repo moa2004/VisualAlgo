@@ -209,7 +209,7 @@ class _HeroHeader extends StatelessWidget {
                 Text(
                   greeting,
                   style: theme.textTheme.headlineLarge?.copyWith(
-                    color: AppColors.textPrimary,
+                    color: theme.colorScheme.onSurface,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -397,7 +397,7 @@ class _InsightsCard extends StatelessWidget {
           Text(
             'Personal insights',
             style: theme.textTheme.headlineSmall?.copyWith(
-              color: AppColors.textPrimary,
+              color: theme.colorScheme.onSurface,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -456,7 +456,7 @@ class _ActionRow extends StatelessWidget {
           Text(
             'Ready for your next breakthrough?',
             style: theme.textTheme.titleLarge?.copyWith(
-              color: AppColors.textPrimary,
+              color: theme.colorScheme.onSurface,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -524,7 +524,7 @@ class _RecentAlgorithms extends StatelessWidget {
             Text(
               'Recent explorations',
               style: theme.textTheme.headlineSmall?.copyWith(
-                color: AppColors.textPrimary,
+                color: theme.colorScheme.onSurface,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -543,7 +543,7 @@ class _RecentAlgorithms extends StatelessWidget {
         Text(
           'Continue your journey',
           style: theme.textTheme.headlineSmall?.copyWith(
-            color: AppColors.textPrimary,
+            color: theme.colorScheme.onSurface,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -623,7 +623,7 @@ class _RecentAlgorithms extends StatelessWidget {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: theme.textTheme.titleMedium?.copyWith(
-                                  color: AppColors.textPrimary,
+                                  color: theme.colorScheme.onSurface,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),

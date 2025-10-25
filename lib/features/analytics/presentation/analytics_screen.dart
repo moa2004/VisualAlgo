@@ -183,6 +183,11 @@ class _AnalyticsBody extends StatelessWidget {
             maxChildSize: 0.95,
             minChildSize: 0.45,
             builder: (context, controller) {
+              final theme = Theme.of(context);
+              final onSurface = theme.colorScheme.onSurface;
+              final sectionAccent = theme.brightness == Brightness.dark
+                  ? AppColors.neonTeal
+                  : onSurface.withValues(alpha: 0.85);
               return GlassContainer(
                 padding: const EdgeInsets.all(24),
                 child: Column(
@@ -193,11 +198,10 @@ class _AnalyticsBody extends StatelessWidget {
                       children: [
                         Text(
                           'Performance report',
-                          style: Theme.of(context).textTheme.titleLarge
-                              ?.copyWith(
-                                color: AppColors.textPrimary,
-                                fontWeight: FontWeight.w700,
-                              ),
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            color: onSurface,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                         IconButton(
                           icon: const Icon(Icons.close_rounded),
@@ -221,11 +225,10 @@ class _AnalyticsBody extends StatelessWidget {
                               children: [
                                 Text(
                                   section.title,
-                                  style: Theme.of(context).textTheme.titleMedium
-                                      ?.copyWith(
-                                        color: AppColors.neonTeal,
-                                        fontWeight: FontWeight.w700,
-                                      ),
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    color: sectionAccent,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                                 const SizedBox(height: 8),
                                 ...section.items.map(
@@ -235,9 +238,12 @@ class _AnalyticsBody extends StatelessWidget {
                                     ),
                                     child: Text(
                                       '• $item',
-                                      style: Theme.of(
-                                        context,
-                                      ).textTheme.bodyMedium,
+                                      style: theme.textTheme.bodyMedium
+                                          ?.copyWith(
+                                        color: onSurface.withValues(
+                                          alpha: 0.85,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -301,12 +307,14 @@ class _TopicInsightCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final onSurface = theme.colorScheme.onSurface;
     final accuracy = (performance.accuracy * 100).toStringAsFixed(0);
+    final neutralColor = onSurface.withValues(alpha: 0.6);
     final statusColor = performance.isWeak
         ? AppColors.errorRed
         : performance.isStrong
         ? AppColors.successGreen
-        : AppColors.textSecondary;
+        : neutralColor;
     final statusLabel = performance.isWeak
         ? 'Needs review'
         : performance.isStrong
@@ -327,7 +335,7 @@ class _TopicInsightCard extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.titleMedium?.copyWith(
-                    color: AppColors.textPrimary,
+                    color: theme.colorScheme.onSurface,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -357,7 +365,7 @@ class _TopicInsightCard extends StatelessWidget {
           Text(
             '$statusLabel — ${performance.correct}/${performance.total} correct',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: AppColors.textSecondary,
+              color: onSurface.withValues(alpha: 0.7),
             ),
           ),
         ],
@@ -404,7 +412,7 @@ class _QuizHistoryTile extends StatelessWidget {
                     Text(
                       '${(summary.percentage).toStringAsFixed(0)}% — ${summary.correctTopics.length}/${summary.totalQuestions} correct',
                       style: theme.textTheme.titleMedium?.copyWith(
-                        color: AppColors.textPrimary,
+                        color: theme.colorScheme.onSurface,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -435,7 +443,7 @@ class _QuizHistoryTile extends StatelessWidget {
             Text(
               'Incorrect answers came from ${summary.incorrectTopics.join(', ')}. Rewatch the visual walkthroughs and retry within 48 hours.',
               style: theme.textTheme.bodySmall?.copyWith(
-                color: AppColors.textSecondary,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
               ),
             ),
           ],
@@ -508,7 +516,7 @@ class _SectionCard extends StatelessWidget {
           Text(
             title,
             style: theme.textTheme.titleLarge?.copyWith(
-              color: AppColors.textPrimary,
+              color: theme.colorScheme.onSurface,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -608,7 +616,7 @@ class _MetricTile extends StatelessWidget {
                   value,
                   style: theme.textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: theme.colorScheme.onSurface,
                   ),
                 ),
                 Text(label, style: theme.textTheme.bodyMedium),

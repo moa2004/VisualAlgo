@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:visual_algo/core/constants/app_colors.dart';
+import 'package:visual_algo/core/widgets/theme_toggle_button.dart';
+
 class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
   const GlassAppBar({
     super.key,
@@ -8,12 +10,14 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.leading,
     this.height = 64,
+    this.showThemeToggle = true,
   });
 
-  final dynamic title; 
+  final dynamic title;
   final List<Widget>? actions;
   final Widget? leading;
   final double height;
+  final bool showThemeToggle;
 
   @override
   Size get preferredSize => Size.fromHeight(height);
@@ -21,13 +25,15 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
     final canPop = Navigator.of(context).canPop();
     final resolvedLeading =
         leading ??
         (canPop
             ? IconButton(
                 style: IconButton.styleFrom(
-                  foregroundColor: AppColors.textPrimary,
+                  foregroundColor: colorScheme.onSurface,
                 ),
                 icon: const Icon(Icons.arrow_back_ios_new_rounded),
                 onPressed: () => Navigator.of(context).maybePop(),
@@ -44,15 +50,24 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [
-                AppColors.midnightBlue.withValues(alpha: 0.92),
-                AppColors.deepNight.withValues(alpha: 0.88),
-              ],
+              colors: isDark
+                  ? [
+                      AppColors.midnightBlue.withValues(alpha: 0.92),
+                      AppColors.deepNight.withValues(alpha: 0.88),
+                    ]
+                  : [
+                      AppColors.auroraSky.withValues(alpha: 0.9),
+                      AppColors.dawnMist.withValues(alpha: 0.88),
+                    ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             border: Border(
-              bottom: BorderSide(color: Colors.white.withValues(alpha: 0.08)),
+              bottom: BorderSide(
+                color: isDark
+                    ? Colors.white.withValues(alpha: 0.08)
+                    : AppColors.slateInk.withValues(alpha: 0.08),
+              ),
             ),
           ),
           child: SafeArea(
@@ -60,7 +75,7 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: IconTheme(
-                data: IconThemeData(color: AppColors.textPrimary),
+                data: IconThemeData(color: colorScheme.onSurface),
                 child: Row(
                   children: [
                     if (resolvedLeading != null) resolvedLeading,
@@ -70,7 +85,7 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
                     Expanded(
                       child: DefaultTextStyle(
                         style: theme.textTheme.titleLarge!.copyWith(
-                          color: AppColors.textPrimary,
+                          color: colorScheme.onSurface,
                           fontWeight: FontWeight.w700,
                         ),
                         maxLines: 1,
@@ -81,10 +96,14 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
                       ),
                     ),
 
-                    if (actions != null) ...[
-                      const SizedBox(width: 8),
-                      ...actions!,
-                    ],
+                    if (_hasTrailing)
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(width: 8),
+                          ...?_buildActions(),
+                        ],
+                      ),
                   ],
                 ),
               ),
@@ -93,5 +112,21 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
     );
+  }
+
+  bool get _hasTrailing => (actions?.isNotEmpty ?? false) || showThemeToggle;
+
+  List<Widget>? _buildActions() {
+    final trailing = <Widget>[];
+    if (actions != null) {
+      trailing.addAll(actions!);
+    }
+    if (showThemeToggle) {
+      if (trailing.isNotEmpty) {
+        trailing.add(const SizedBox(width: 8));
+      }
+      trailing.add(const ThemeToggleButton());
+    }
+    return trailing;
   }
 }

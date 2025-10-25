@@ -12,14 +12,25 @@ class AppSnackBar {
   }) {
     final theme = Theme.of(context);
     final messenger = ScaffoldMessenger.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final background =
+        (isError
+                ? AppColors.errorRed
+                : isDark
+                ? AppColors.midnightBlue
+                : AppColors.auroraSky)
+            .withValues(alpha: isError ? 0.92 : 0.94);
+    final iconColor = isError
+        ? Colors.white
+        : theme.colorScheme.onSurface.withValues(alpha: 0.9);
+    final textColor = isError ? Colors.white : theme.colorScheme.onSurface;
+
     messenger
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
           behavior: SnackBarBehavior.floating,
-          backgroundColor:
-              (isError ? AppColors.errorRed : AppColors.midnightBlue)
-                  .withValues(alpha: isError ? 0.92 : 0.94),
+          backgroundColor: background,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -32,14 +43,14 @@ class AppSnackBar {
                     (isError
                         ? Icons.error_outline_rounded
                         : Icons.check_circle_outline_rounded),
-                color: Colors.white,
+                color: iconColor,
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   message,
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: Colors.white,
+                    color: textColor,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

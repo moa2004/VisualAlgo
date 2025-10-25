@@ -79,7 +79,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         AnimatedContainer(
           duration: 300.ms,
           height: 8,
-          width: MediaQuery.of(context).size.width * 0.3 * (_passwordStrength + 0.1),
+          width:
+              MediaQuery.of(context).size.width *
+              0.3 *
+              (_passwordStrength + 0.1),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
             gradient: LinearGradient(
@@ -104,7 +107,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     try {
-      await ref.read(authRepositoryProvider).signUpWithEmail(
+      await ref
+          .read(authRepositoryProvider)
+          .signUpWithEmail(
             email: _emailController.text.trim(),
             password: _passwordController.text.trim(),
             displayName: _nameController.text.trim(),
@@ -166,7 +171,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.neonTeal.withOpacity(0.85),
                     foregroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 12,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),
@@ -202,7 +210,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Close', style: TextStyle(color: Colors.redAccent)),
+              child: const Text(
+                'Close',
+                style: TextStyle(color: Colors.redAccent),
+              ),
             ),
           ],
         ),
@@ -235,7 +246,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   Text(
                     'Create Your Account',
                     style: theme.textTheme.headlineMedium?.copyWith(
-                      color: AppColors.textPrimary,
+                      color: theme.colorScheme.onSurface,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -248,7 +259,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 gradient: LinearGradient(
                   colors: [
                     Colors.white.withOpacity(0.05),
-                    Colors.white.withOpacity(0.02)
+                    Colors.white.withOpacity(0.02),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -264,8 +275,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           labelText: 'Full name',
                           prefixIcon: Icon(Icons.person_outline),
                         ),
-                        validator: (v) =>
-                            v == null || v.trim().isEmpty ? 'Enter your name' : null,
+                        validator: (v) => v == null || v.trim().isEmpty
+                            ? 'Enter your name'
+                            : null,
                       ),
                       const SizedBox(height: 12),
                       TextFormField(
@@ -275,8 +287,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           prefixIcon: Icon(Icons.email_outlined),
                         ),
                         keyboardType: TextInputType.emailAddress,
-                        validator: (v) =>
-                            v == null || !v.contains('@') ? 'Enter a valid email' : null,
+                        validator: (v) => v == null || !v.contains('@')
+                            ? 'Enter a valid email'
+                            : null,
                       ),
                       const SizedBox(height: 12),
                       TextFormField(
@@ -286,8 +299,13 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           labelText: 'Password',
                           prefixIcon: const Icon(Icons.lock_outline),
                           suffixIcon: IconButton(
-                            icon: Icon(_obscure ? Icons.visibility : Icons.visibility_off),
-                            onPressed: () => setState(() => _obscure = !_obscure),
+                            icon: Icon(
+                              _obscure
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                            onPressed: () =>
+                                setState(() => _obscure = !_obscure),
                           ),
                         ),
                         onChanged: _checkPasswordStrength,
@@ -317,7 +335,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.neonTeal.withOpacity(0.2),
                           foregroundColor: AppColors.neonTeal,
-                          side: BorderSide(color: AppColors.neonTeal.withOpacity(0.4)),
+                          side: BorderSide(
+                            color: AppColors.neonTeal.withOpacity(0.4),
+                          ),
                           padding: const EdgeInsets.symmetric(vertical: 14),
                           textStyle: const TextStyle(
                             fontWeight: FontWeight.bold,
@@ -334,8 +354,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('Already have an account? ',
-                              style: TextStyle(color: Colors.white70)),
+                          const Text(
+                            'Already have an account? ',
+                            style: TextStyle(color: Colors.white70),
+                          ),
                           TextButton(
                             onPressed: () => context.go(SignInScreen.routePath),
                             child: const Text(
@@ -359,20 +381,23 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 gradient: LinearGradient(
                   colors: [
                     Colors.white.withOpacity(0.03),
-                    Colors.white.withOpacity(0.01)
+                    Colors.white.withOpacity(0.01),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
                 child: Column(
                   children: [
-                    const Icon(Icons.auto_graph_rounded,
-                        color: AppColors.neonTeal, size: 36),
+                    const Icon(
+                      Icons.auto_graph_rounded,
+                      color: AppColors.neonTeal,
+                      size: 36,
+                    ),
                     const SizedBox(height: 12),
                     Text(
                       'Why join AlgorithMat?',
                       style: theme.textTheme.titleLarge?.copyWith(
-                        color: AppColors.textPrimary,
+                        color: theme.colorScheme.onSurface,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -389,15 +414,19 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
-                        Icon(Icons.psychology_alt_rounded,
-                            color: AppColors.neonTeal),
+                        Icon(
+                          Icons.psychology_alt_rounded,
+                          color: AppColors.neonTeal,
+                        ),
                         SizedBox(width: 8),
                         Icon(Icons.code_rounded, color: Colors.amberAccent),
                         SizedBox(width: 8),
-                        Icon(Icons.school_rounded,
-                            color: Colors.lightBlueAccent),
+                        Icon(
+                          Icons.school_rounded,
+                          color: Colors.lightBlueAccent,
+                        ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ).animate().fadeIn(duration: 700.ms).slideY(begin: 0.3),

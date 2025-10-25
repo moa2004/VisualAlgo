@@ -23,11 +23,12 @@ class SplashScreen extends ConsumerStatefulWidget {
 
 class _SplashScreenState extends ConsumerState<SplashScreen> {
   late Timer _timer;
+  static const _displayDuration = Duration(milliseconds: 2200);
 
   @override
   void initState() {
     super.initState();
-    _timer = Timer(const Duration(seconds: 3), _handleNavigation);
+    _timer = Timer(_displayDuration, _handleNavigation);
   }
 
   void _handleNavigation() {

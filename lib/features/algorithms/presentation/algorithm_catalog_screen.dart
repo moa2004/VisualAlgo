@@ -64,7 +64,7 @@ class _AlgorithmCatalogScreenState
             Text(
               'Explore 50+ expertly curated algorithms with cinematic visualisations.',
               style: theme.textTheme.titleLarge?.copyWith(
-                color: AppColors.textPrimary,
+                color: theme.colorScheme.onSurface,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -291,14 +291,16 @@ class _AlgorithmCard extends StatelessWidget {
                                 algorithm.name,
                                 style: theme.textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.w700,
-                                  color: Colors.white,
+                                  color: theme.colorScheme.onSurface,
                                 ),
                               ),
                               const SizedBox(height: 4),
                               Text(
                                 algorithm.category,
                                 style: theme.textTheme.bodySmall?.copyWith(
-                                  color: AppColors.textSecondary,
+                                  color: theme.colorScheme.onSurface.withValues(
+                                    alpha: 0.7,
+                                  ),
                                 ),
                               ),
                             ],
@@ -404,7 +406,7 @@ class _ComplexitySummary extends StatelessWidget {
               child: Text(
                 '${item.$1}: ${item.$2}',
                 style: theme.textTheme.labelSmall?.copyWith(
-                  color: AppColors.textPrimary,
+                  color: theme.colorScheme.onSurface,
                   fontWeight: FontWeight.w600,
                 ),
               ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:visual_algo/core/constants/app_colors.dart';
 import 'package:visual_algo/core/widgets/app_scaffold.dart';
 import 'package:visual_algo/core/widgets/async_value_widget.dart';
 import 'package:visual_algo/core/widgets/glass_app_bar.dart';
@@ -40,6 +39,7 @@ class _QuizSetupScreenState extends ConsumerState<QuizSetupScreen> {
           }.toList()..sort();
           return LayoutBuilder(
             builder: (context, constraints) {
+              final theme = Theme.of(context);
               final paddingBottom = MediaQuery.of(context).padding.bottom + 32;
               return SingleChildScrollView(
                 padding: EdgeInsets.fromLTRB(24, 24, 24, paddingBottom),
@@ -51,11 +51,10 @@ class _QuizSetupScreenState extends ConsumerState<QuizSetupScreen> {
                       children: [
                         Text(
                           'Craft your perfect challenge',
-                          style: Theme.of(context).textTheme.headlineSmall
-                              ?.copyWith(
-                                color: AppColors.textPrimary,
-                                fontWeight: FontWeight.w700,
-                              ),
+                          style: theme.textTheme.headlineSmall?.copyWith(
+                            color: theme.colorScheme.onSurface,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                         const SizedBox(height: 24),
                         GlassContainer(
